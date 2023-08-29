@@ -87,3 +87,48 @@ Also this library has other functions that make the job easier to build applicat
 
 
 
+### Library Installation
+
+You can install this library on your Arduino environment using different methods. The best ways to do that are described below.  
+
+#### Installing via Arduino IDE
+
+This is the easiest method to install this library.
+
+On Arduino IDE, select the __"Tools" >> Manage Libraries..."__ item and look for MIC74. Finally select "AnTar MIC74". The images below show the installation process. 
+
+
+##### Going to Manage libraries...
+
+![Manage libraries](extras/images/install_lib_01.png)
+
+
+##### Looking for MIC74
+
+![Looking for MIC74](extras/images/install_lib_02.png)
+
+
+##### Checking the AnTar MIC74 examples
+
+![Checking examples](extras/images/install_lib_03.png)
+
+
+##### More information
+
+See also [Installing Libraries](https://docs.arduino.cc/software/ide-v1/tutorials/installing-libraries)
+
+
+
+#### Installing via this repository 
+
+First, you have to [download](https://github.com/TarAndr/AnTar_MIC74/archive/main.zip) this library in zip format. 
+After, unzip the AnTar_MIC74-main.zip file in your Arduino Library folder:
+
+* On __Windows__: "My Documents\Arduino\libraries"
+* On __MAC OS__: ˜/Documents/Arduino/libraries
+* On __Linux__: ˜/Documents/Arduino/libraries
+
+With that approach, you will have the __most current version__ of the library. However, __it may not be the most stable version__. This is because the current version is always in development.
+Do you need some old version (release) of this library?  If yes, [check here](https://github.com/TarAndr/AnTar_MIC74/releases). 
+
+
