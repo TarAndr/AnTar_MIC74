@@ -22,12 +22,14 @@ This Arduino library implements the most important functions available on MIC74 
 1. [License Copyright](#mit-license)
 2. [Thanks](#thanks)
 3. [Library Features](#library-features)
-4. [Library Installation](#library-installation)
-5. [Other Arduino Libraries developed by the Author](https://tarandr.github.io/MIC74/#other-arduino-libraries-developed-by-the-author)
-6. [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/)
-7. [Basic Schematic](https://tarandr.github.io/MIC74/#basic-schematic)
-8. [Internal Interrupt setup](https://tarandr.github.io/MIC74/#internal-interrupt-setup) 
-9. [References](https://tarandr.github.io/MIC74/#references)
+4. [Demo Video](#demo-video)
+5. [Registers](#registers)
+6. [Library Installation](#library-installation)
+7. [Other Arduino Libraries developed by the Author](https://tarandr.github.io/MIC74/#other-arduino-libraries-developed-by-the-author)
+8. [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/)
+9. [Basic Schematic](https://tarandr.github.io/MIC74/#basic-schematic)
+10. [Internal Interrupt setup](https://tarandr.github.io/MIC74/#internal-interrupt-setup) 
+11. [References](https://tarandr.github.io/MIC74/#references)
 
 
 ### MIT License 
@@ -67,7 +69,7 @@ This library uses the I²C communication protocol and implements most important 
 * Internal Interrupt feature setup
 * Fan speed control
 
-### Demo video 
+### Demo Video 
 
 {% include video01.html %}
 
@@ -105,17 +107,17 @@ On Arduino IDE, select the __"Tools" >> Manage Libraries..."__ item and look for
 
 ##### Going to Manage libraries...
 
-![Manage libraries](extras/images/install_lib_01.png)
+![Manage libraries](extras/images/00_MIC74.jpg)
 
 
 ##### Looking for MIC74
 
-![Looking for MIC74](extras/images/install_lib_02.png)
+![Looking for MIC74](extras/images/00_MIC74.jpg)
 
 
 ##### Checking the AnTar MIC74 examples
 
-![Checking examples](extras/images/install_lib_03.png)
+![Checking examples](extras/images/00_MIC74.jpg)
 
 
 ##### More information
