@@ -11,14 +11,18 @@ Some Arduino projects may require more pins than the Arduino actually has. In th
 
 This Arduino library implements the most important functions available on MIC74 device  and can be freely distributed using the MIT Free Software model. 
 
-[Copyright (c) 2023 Tarasenko Andrey](https://tarandr.github.io/MIC74/#mit-license).
+[Copyright (c) 2023 Tarasenko Andrey](LICENSE).
 
-### Contents
+**Contents**
 
-1. [License Copyright](https://tarandr.github.io/MIC74/#mit-license)
-2. [Thanks](https://tarandr.github.io/MIC74/#thanks)
-3. [Library Features](https://tarandr.github.io/MIC74/#library-features)
-4. [Library Installation](https://tarandr.github.io/MIC74/#library-installation)
+[TOCM]
+
+[TOC]
+
+1. [License Copyright](#mit-license)
+2. [Thanks](#thanks)
+3. [Library Features](#library-features)
+4. [Library Installation](#library-installation)
 5. [Other Arduino Libraries developed by the Author](https://tarandr.github.io/MIC74/#other-arduino-libraries-developed-by-the-author)
 6. [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/)
 7. [Basic Schematic](https://tarandr.github.io/MIC74/#basic-schematic)
@@ -47,6 +51,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
 ### Thanks
 
 * Mrs. [Ricardo Lima Caratti](https://github.com/pu2clr) the [MCP23008](https://github.com/pu2clr/MCP23008/) library he created was taken as a template.
