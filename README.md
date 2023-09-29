@@ -22,18 +22,16 @@ This Arduino library implements the most important functions available on MIC74 
 - [AnTar MIC74 Arduino Library](https://github.com/TarAndr/AnTar_MIC74 "AnTar MIC74 Arduino Library")
 
 1. [MIT License](#mit-license)
-2. [Thanks](#thanks)
-3. [Library Features](#library-features)
-4. [Demo Video](#demo-video)
-5. [Library Installation](#library-installation)
-	 5.1. [Installing via Arduino IDE](#installing-via-arduino-ide)
-	 5.2. [Installing via this repository](#installing-via-this-repository)
-6. [Registers](#registers)
-7. [Other Arduino Libraries developed by the Author](https://tarandr.github.io/MIC74/#other-arduino-libraries-developed-by-the-author)
-8. [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/)
-9. [Basic Schematic](https://tarandr.github.io/MIC74/#basic-schematic)
-10. [Internal Interrupt setup](https://tarandr.github.io/MIC74/#internal-interrupt-setup) 
-11. [References](https://tarandr.github.io/MIC74/#references)
+1. [Thanks](#thanks)
+1. [Library Features](#library-features)
+1. [Demo Video](#demo-video)
+1. [Library Installation](#library-installation)
+1. [Registers](#registers)
+1. [Other Arduino Libraries developed by the Author](https://tarandr.github.io/MIC74/#other-arduino-libraries-developed-by-the-author)
+1. [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/)
+1. [Basic Schematic](https://tarandr.github.io/MIC74/#basic-schematic)
+1. [Internal Interrupt setup](https://tarandr.github.io/MIC74/#internal-interrupt-setup) 
+1. [References](https://tarandr.github.io/MIC74/#references)
 
 
 ### MIT License 
