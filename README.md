@@ -168,7 +168,29 @@ For configuration and control, the MIC74 chip has 7 registers, each of which con
 This library has two categories of functions that you can use to control everything on the MIC74. The first category includes configuration functions and is used less frequently, while the second category consists of control functions and is used more often. This library also has other auxiliary functions that simplify the creation of applications based on Arduino and MIC74 devices. See [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/).
 
 
-#### Setup functions
+#### Configuration functions
+
+Function for setting the pin direction and operating mode of the output:
+
+**pinMode(*pin, mode*);**
+
+- **pin**: port pin 0 to 7;
+- **mode**: the desired operating mode of the specified INPUT, OUTPUT, INPUT_WITH_INTERRUPT or OUTPUT_PUSHPULL pin.
+
+This function interacts with three registers at once and, in addition to specifying the output direction, can set an interrupt mask for it, in the case of setting the output to an input, or a push-pull mode for the output stage, in the case of setting the output to an output. In the case of simply specifying a pin to operate as an input, interrupts for it will be disabled, and for operation as an output, the operating mode of the output stage will be set to open drain.
+
+Function to configure the entire port at once
+
+**writePortMode(*value*);**
+
+- **value**: a specified value, which for clarity is conveniently represented as a bit field 0bxxxxxxxx.
+
+Where in the required positions “0” or “1” is written instead of “x”, for example writePortMode(0b11111111); will simultaneously set all pins of the chip to the output direction, and writePortMode(0b00000000); accordingly to the entrance.
+
+
+#### Control functions
+
+
 
 ### Basic schematic
 
