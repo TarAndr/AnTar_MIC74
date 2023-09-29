@@ -26,8 +26,8 @@ This Arduino library implements the most important functions available on MIC74 
 1. [Library Features](#library-features)
 1. [Demo Video](#demo-video)
 1. [Library Installation](#library-installation)
+1. [MIC74 brief characteristics](#Brief-characteristics-of-the-MIC74-chip)
 1. [Registers](#registers)
-1. [Other Arduino Libraries developed by the Author](https://tarandr.github.io/MIC74/#other-arduino-libraries-developed-by-the-author)
 1. [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/)
 1. [Basic Schematic](https://tarandr.github.io/MIC74/#basic-schematic)
 1. [Internal Interrupt setup](https://tarandr.github.io/MIC74/#internal-interrupt-setup) 
@@ -123,6 +123,19 @@ With that approach, you will have the __most current version__ of the library. H
 Do you need some old version (release) of this library?  If yes, [check here](https://github.com/TarAndr/AnTar_MIC74/releases). 
 
 
+### Brief characteristics of the MIC74 chip
+
+The MIC74 chip is a fully programmable serial-to-parallel I/O expander converter that is compatible with the SMBus™ protocol. It operates as a bus client providing eight independent I/O lines.
+
+Each I/O bit can be individually programmed as an input or output. If any pin is programmed as an output, then each such pin can be programmed as an open-drain output or a push-pull output. If desired, four outputs can be programmed to implement fan speed control. An internal clock and status system eliminates the overhead required to control fan speed.
+
+The output pins are capable of directly driving loads such as LEDs. It is possible to use interrupts during state changes on the input pins. This eliminates the need to poll the device each time to obtain pin status information. Three address selection inputs are provided, allowing up to eight devices to be connected and shared on the same bus, providing a total of 64 additional I/Os to your microcontroller.
+
+The MIC74 chip is available in an ultra-compact 16-pin QSOP package. Low quiescent current, small footprint and low chassis height make the MIC74 ideal for portable and desktop applications:
+
+![MIC74 housing type and pinout](extras/images/00_MIC74-2-Wire-Serial-IO-Expander-and-Fan-Controller.png "MIC74 housing type and pinout")
+
+
 ### Registers
 
 This library has two basic function that you can use to control everything on MIC74. You can use [regRead](https://www.youtube.com/watch?v=muUAhf5DGE8) and [regWrite](https://www.youtube.com/watch?v=muUAhf5DGE8) methods to setup the registers below. Also this library has other functions that make the job easier to build applications based on Arduino and MIC74 devices. See [API documentation](https://www.youtube.com/watch?v=muUAhf5DGE8).
@@ -136,6 +149,21 @@ This library has two basic function that you can use to control everything on MI
 | INT_MASK   | 0x04  | Interrupt mask read/write register|
 | DATA    | 0x05  | Data read/write register|
 | FAN_SPEED   | 0x06  | Fan speed read/write register, Determines bit-pattern on FS[2:0]|
+
+### Functions
+
+#### Setup functions
+
+### Basic schematic
+
+The image below shows a basic MIC74 application with LED. You can control up to 8 LEDs. The I²C bus address is set to 0x27. You can select another I²C address by dealing with the A0, A1 and A2 pins (from 0x20 to 0x27). This circuit uses the MIC74 GPIO PINs as output.   
+
+#### GPIO as output setup
+
+![Basic Schematic with LEDs](extras/images/MIC74_LEDs.GIF)
+
+
+
 
 Also this library has other functions that make the job easier to build applications. See [API documentation](https://www.youtube.com/watch?v=muUAhf5DGE8).
 
