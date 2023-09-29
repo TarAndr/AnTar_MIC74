@@ -1,6 +1,6 @@
-Documentation made in [Open source online Markdown editor](https://pandao.github.io/editor.md/en.html "Open source online Markdown editor").
+Documentation made in [Open source online Markdown editor](https://pandao.github.io/editor.md/en.html "Open source online Markdown editor") and converted to HTML in [Free Markdown to HTML Converter](https://markdowntohtml.com/ "Convert Markdown to HTML").
 
-## [AnTar MIC74 Arduino Library](https://tarandr.github.io/MIC74/)
+## [AnTar MIC74 Arduino Library](https://github.com/TarAndr/AnTar_MIC74)
 
 It is an Arduino Library to control the MIC74 8-Bit I/O Expander. 
 
@@ -19,12 +19,15 @@ This Arduino library implements the most important functions available on MIC74 
 
 [TOC]
 
-1. [License Copyright](#mit-license)
-2. [Thanks](#thanks)
-3. [Library Features](#library-features)
-4. [Demo Video](#demo-video)
-5. [Registers](#registers)
-6. [Library Installation](#library-installation)
+- [AnTar MIC74 Arduino Library](https://github.com/TarAndr/AnTar_MIC74 "AnTar MIC74 Arduino Library")
+
+1. [MIT License](#MIT%20License)
+2. [Thanks](#Thanks)
+3. [Library Features](#Library%20Features)
+4. [Demo Video](#Demo%20Video)
+5. [Library Installation](#library-installation)
+5.1. [Installing via Arduino IDE](#installing-via-arduino-ide)
+6. [Registers](#registers)
 7. [Other Arduino Libraries developed by the Author](https://tarandr.github.io/MIC74/#other-arduino-libraries-developed-by-the-author)
 8. [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/)
 9. [Basic Schematic](https://tarandr.github.io/MIC74/#basic-schematic)
@@ -76,24 +79,6 @@ This library uses the I²C communication protocol and implements most important 
 [See on Youtube](https://www.youtube.com/watch?v=muUAhf5DGE8)
 <BR>
 
-### Registers
-
-This library has two basic function that you can use to control everything on MIC74. You can use [regRead](https://www.youtube.com/watch?v=muUAhf5DGE8) and [regWrite](https://www.youtube.com/watch?v=muUAhf5DGE8) methods to setup the registers below. Also this library has other functions that make the job easier to build applications based on Arduino and MIC74 devices. See [API documentation](https://www.youtube.com/watch?v=muUAhf5DGE8).
-
-| Register | Address | Description |
-| -------- | ----- | ------------|
-| DEV_CFG  | 0x00  | Device configuration read/write register|
-| DIR  | 0x01  | Data direction read/write register|
-| OUT_CFG  | 0x02  | Output configuration read/write register|
-| STATUS   | 0x03  | Status read register|
-| INT_MASK   | 0x04  | Interrupt mask read/write register|
-| DATA    | 0x05  | Data read/write register|
-| FAN_SPEED   | 0x06  | Fan speed read/write register, Determines bit-pattern on FS[2:0]|
-
-Also this library has other functions that make the job easier to build applications. See [API documentation](https://www.youtube.com/watch?v=muUAhf5DGE8).
-
-
-
 ### Library Installation
 
 You can install this library on your Arduino environment using different methods. The best ways to do that are described below.  
@@ -137,5 +122,23 @@ After, unzip the AnTar_MIC74-main.zip file in your Arduino Library folder:
 
 With that approach, you will have the __most current version__ of the library. However, __it may not be the most stable version__. This is because the current version is always in development.
 Do you need some old version (release) of this library?  If yes, [check here](https://github.com/TarAndr/AnTar_MIC74/releases). 
+
+
+### Registers
+
+This library has two basic function that you can use to control everything on MIC74. You can use [regRead](https://www.youtube.com/watch?v=muUAhf5DGE8) and [regWrite](https://www.youtube.com/watch?v=muUAhf5DGE8) methods to setup the registers below. Also this library has other functions that make the job easier to build applications based on Arduino and MIC74 devices. See [API documentation](https://www.youtube.com/watch?v=muUAhf5DGE8).
+
+| Register | Address | Description |
+| -------- | ----- | ------------|
+| DEV_CFG  | 0x00  | Device configuration read/write register|
+| DIR  | 0x01  | Data direction read/write register|
+| OUT_CFG  | 0x02  | Output configuration read/write register|
+| STATUS   | 0x03  | Status read register|
+| INT_MASK   | 0x04  | Interrupt mask read/write register|
+| DATA    | 0x05  | Data read/write register|
+| FAN_SPEED   | 0x06  | Fan speed read/write register, Determines bit-pattern on FS[2:0]|
+
+Also this library has other functions that make the job easier to build applications. See [API documentation](https://www.youtube.com/watch?v=muUAhf5DGE8).
+
 
 
