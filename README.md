@@ -21,12 +21,12 @@ This Arduino library implements the most important functions available on MIC74 
 
 - [AnTar MIC74 Arduino Library](https://github.com/TarAndr/AnTar_MIC74 "AnTar MIC74 Arduino Library")
 
-1. [MIT License](#MIT%20License)
-2. [Thanks](#Thanks)
-3. [Library Features](#Library%20Features)
-4. [Demo Video](#Demo%20Video)
+1. [MIT License](#mit-license)
+2. [Thanks](#thanks)
+3. [Library Features](#library-features)
+4. [Demo Video](#demo-video)
 5. [Library Installation](#library-installation)
-5.1. [Installing via Arduino IDE](#installing-via-arduino-ide)
+	5.1. [Installing via Arduino IDE](#installing-via-arduino-ide)
 6. [Registers](#registers)
 7. [Other Arduino Libraries developed by the Author](https://tarandr.github.io/MIC74/#other-arduino-libraries-developed-by-the-author)
 8. [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/)
