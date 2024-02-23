@@ -29,7 +29,7 @@
  * @details This method will look for a valid MIC74 device adress between 0x20 and 0x27 
  * @return uint8_t the I2C address of the first MIC74 device connect in the I2C bus
  */
-uint8_t MIC::lookFor() {
+uint8_t MIC74::lookFor() {
     int err = 0;
     Wire.begin();
     for (int addr = 0x20; addr <= 0x27; ++addr)
@@ -48,7 +48,7 @@ uint8_t MIC::lookFor() {
  * @brief Starts the MIC74 
  * @details Starts the MIC74 with default values.
  */
-void MIC::begin(uint8_t i2cAddress, long i2cFrequency)
+void MIC74::begin(uint8_t i2cAddress, long i2cFrequency)
 {
     Wire.begin(); 						//creates a Wire object
 	Wire.setClock(i2cFrequency);
@@ -65,19 +65,19 @@ void MIC::begin(uint8_t i2cAddress, long i2cFrequency)
  *            		You also can use a bitmask to configure some pins for input and other pins for output.
  * @param i2cFreq set the I2C bus frequency/speed (default 100000 = 100KHz)
  */
-/* void MIC::setup(uint8_t dir, uint8_t intMask, uint8_t outCfg, uint8_t data)
+/* void MIC74::setup(uint8_t dir, uint8_t intMask, uint8_t outCfg, uint8_t data)
 {
 	if(data != PORT_SET)
 	{
-		this->setReg(REG_DATA, data);		// Sets levels of pins
+		this->regWrite(REG_DATA, data);		// Sets levels of pins
 		this->_data = data;
 	}
 
-	if(outCfg != PORT_CLR) this->setReg(REG_OUT_CFG, outCfg);	// Selects output driver configuration
+	if(outCfg != PORT_CLR) this->regWrite(REG_OUT_CFG, outCfg);	// Selects output driver configuration
 
-	if(dir != PORT_CLR) this->setReg(REG_DIR, dir);		// Selects data direction, input or output
+	if(dir != PORT_CLR) this->regWrite(REG_DIR, dir);		// Selects data direction, input or output
 
-    this->setReg(REG_DIR, dir);    	// All GPIO pins are configured to input (0)  or output (1)
+    this->regWrite(REG_DIR, dir);    	// All GPIO pins are configured to input (0)  or output (1)
     
 } */
 
@@ -90,7 +90,7 @@ void MIC::begin(uint8_t i2cAddress, long i2cFrequency)
  * @param reg  (0x00 ~ 0x06) see MIC74 registers documentation 
  * @return uint8_t current register value
  */
-uint8_t MIC::getReg(uint8_t reg) {
+uint8_t MIC74::regRead(uint8_t reg) {
     Wire.beginTransmission(this->_i2cAddress);
     Wire.write(reg);
     Wire.endTransmission();
@@ -101,11 +101,11 @@ uint8_t MIC::getReg(uint8_t reg) {
 /**
  * @ingroup group02
  * @brief Sets a given value (HIGH(1) or LOW(0)) to a given GPIO pin
- * @details It is like the pinHigh() or pinLow()
+ * @details It is like the pinToHigh() or pinToLow()
  * @param gpio pin number
  * @param value 1 = High;  0 = Low; or HIGH and LOW
  */
-void MIC::pinMode(uint8_t pin, uint8_t mode)
+void MIC74::pinMode(uint8_t pin, uint8_t mode)
 {
     if(pin > 7) return;
 
@@ -115,18 +115,18 @@ void MIC::pinMode(uint8_t pin, uint8_t mode)
 
 	if(mode == INPUT || mode == INPUT_WITH_INTERRUPT)
 	{
-		another_mask = this->getReg(REG_INT_MASK) & ~(1 << pin) | (another_mask << pin);
-		this->setReg(REG_INT_MASK, another_mask);
+		another_mask = this->regRead(REG_INT_MASK) & ~(1 << pin) | (another_mask << pin);
+		this->regWrite(REG_INT_MASK, another_mask);
 	}
 	else if(mode == OUTPUT || mode == OUTPUT_PUSHPULL)
 	{
 		dir_mask = 1;
-		another_mask = this->getReg(REG_OUT_CFG) & ~(1 << pin) | (another_mask << pin);
-		this->setReg(REG_OUT_CFG, another_mask);
+		another_mask = this->regRead(REG_OUT_CFG) & ~(1 << pin) | (another_mask << pin);
+		this->regWrite(REG_OUT_CFG, another_mask);
 	}
 
-	dir_mask = this->getReg(REG_DIR) & ~(1 << pin) | (dir_mask << pin);
-    this->setReg(REG_DIR, dir_mask);
+	dir_mask = this->regRead(REG_DIR) & ~(1 << pin) | (dir_mask << pin);
+    this->regWrite(REG_DIR, dir_mask);
 }
 
    /**
@@ -135,21 +135,21 @@ void MIC::pinMode(uint8_t pin, uint8_t mode)
      * @details The STATUS register reflects the input-change event on the port pins of any pin that is configured as input.
      * @return uint8_t value of STATUS register
      */
-   uint8_t MIC::getStatus()
+   uint8_t MIC74::readStatus()
    {
-      this->_status = getReg(REG_STATUS);
+      this->_status = regRead(REG_STATUS);
       return this->_status;
    }
 
    /**
    * @ingroup group02
-   * @brief Returns the current MIC GPIO pin levels 
+   * @brief Returns the current MIC74 GPIO pin levels 
    * @param none
    * @return uint8_t 
    */
-   uint8_t MIC::portRead()
+   uint8_t MIC74::portRead()
    {
-      this->_data = getReg(REG_DATA);
+      this->_data = regRead(REG_DATA);
       return this->_data;
    }
 
@@ -159,9 +159,9 @@ void MIC::pinMode(uint8_t pin, uint8_t mode)
    * @param none
    * @return speed level from 0 to 7
    */
-   uint8_t MIC::getFanSpeed()
+   uint8_t MIC74::readFanSpeed()
    {
-      return this->getReg(REG_FAN_SPEED);
+      return this->regRead(REG_FAN_SPEED);
    }
 
 /**
@@ -171,7 +171,7 @@ void MIC::pinMode(uint8_t pin, uint8_t mode)
  * @param reg   (0x00 ~ 0x06 exclude 0x03) see MIC74 registers documentation 
  * @param value (8 bits)
  */
-void MIC::setReg(uint8_t reg, uint8_t value) {
+void MIC74::regWrite(uint8_t reg, uint8_t value) {
     Wire.beginTransmission(this->_i2cAddress);
     Wire.write(reg);
     Wire.write(value);
@@ -184,9 +184,9 @@ void MIC::setReg(uint8_t reg, uint8_t value) {
    * @details A direct way to set a given value to deal with the GPIOs pins.
    * @param value (8 bits)
    */
-   void MIC::portWrite(uint8_t value)
+   void MIC74::portWrite(uint8_t value)
    {
-       this->setReg(REG_DATA, value);
+       this->regWrite(REG_DATA, value);
 	   this->_data = value;
    }
 
@@ -196,9 +196,9 @@ void MIC::setReg(uint8_t reg, uint8_t value) {
    * @details A direct way to set a given value to deal with the GPIOs pins.
    * @param value (8 bits)
    */
-   void MIC::setPortMode(uint8_t value)
+   void MIC74::writePortMode(uint8_t value)
    {
-       this->setReg(REG_DIR, value);
+       this->regWrite(REG_DIR, value);
    }
 
    /**
@@ -208,9 +208,9 @@ void MIC::setReg(uint8_t reg, uint8_t value) {
    * @param none
    * @return value (8 bits)
    */
-   uint8_t MIC::getPortMode()
+   uint8_t MIC74::readPortMode()
    {
-       return this->getReg(REG_DIR);
+       return this->regRead(REG_DIR);
    }
 
    /**
@@ -219,9 +219,9 @@ void MIC::setReg(uint8_t reg, uint8_t value) {
    * @details A direct way to set a given value to deal with the GPIOs pins.
    * @param value (8 bits)
    */
-   void MIC::setPortOutMode(uint8_t value)
+   void MIC74::writePortOutMode(uint8_t value)
    {
-       this->setReg(REG_OUT_CFG, value);
+       this->regWrite(REG_OUT_CFG, value);
    }
 
    /**
@@ -231,9 +231,9 @@ void MIC::setReg(uint8_t reg, uint8_t value) {
    * @param none
    * @return value (8 bits)
    */
-   uint8_t MIC::getPortOutMode()
+   uint8_t MIC74::readPortOutMode()
    {
-       return this->getReg(REG_OUT_CFG);
+       return this->regRead(REG_OUT_CFG);
    }
 
    /**
@@ -242,9 +242,9 @@ void MIC::setReg(uint8_t reg, uint8_t value) {
    * @details A direct way to set a given value to deal with the GPIOs pins.
    * @param mask (8 bits)
    */
-   void MIC::setPortInterrupts(uint8_t mask)
+   void MIC74::writePortInterrupts(uint8_t mask)
    {
-       this->setReg(REG_INT_MASK, mask);
+       this->regWrite(REG_INT_MASK, mask);
    }
 
    /**
@@ -254,9 +254,9 @@ void MIC::setReg(uint8_t reg, uint8_t value) {
    * @param none
    * @return mask (8 bits)
    */
-   uint8_t MIC::getPortInterrupts()
+   uint8_t MIC74::readPortInterrupts()
    {
-       return this->getReg(REG_INT_MASK);
+       return this->regRead(REG_INT_MASK);
    }
 
    /**
@@ -265,10 +265,10 @@ void MIC::setReg(uint8_t reg, uint8_t value) {
    * @details Way to set a given speed to fan speed register.
    * @param speed from 0 to 7 (3 bits)
    */
-   void MIC::setFanSpeed(uint8_t speed)
+   void MIC74::writeFanSpeed(uint8_t speed)
    {
 	   if(speed > 7) speed = 7;
-       this->setReg(REG_FAN_SPEED, speed);
+       this->regWrite(REG_FAN_SPEED, speed);
    }
 
    /**
@@ -277,9 +277,9 @@ void MIC::setReg(uint8_t reg, uint8_t value) {
    * @details Physical writing of the shadow buffer to the port register for delayed functions
    * @param none
    */
-   void MIC::portWrite()
+   void MIC74::portWrite()
    {
-       this->portWrite(_data);
+       this->portWrite(this->_data);
    }
 
 /**
@@ -288,12 +288,12 @@ void MIC::setReg(uint8_t reg, uint8_t value) {
  * @details Sets a given GPIO pin high
  * @param pin the GPIO PIN number (0-7)
  */
-void MIC::pinHigh(uint8_t pin)
+void MIC74::pinToHigh(uint8_t pin)
 {
     if(pin > 7) return;
     pin = (1 << pin);
-    this->_data = this->getReg(REG_DATA) | pin;
-    this->setReg(REG_DATA, this->_data);
+    this->_data = this->regRead(REG_DATA) | pin;
+    this->regWrite(REG_DATA, this->_data);
 }
 
 /**
@@ -302,7 +302,7 @@ void MIC::pinHigh(uint8_t pin)
  * @details Just sets a given GPIO pin bit on the shadow register and do not send it to the chip
  * @param pin the GPIO PIN number (0-7)
  */
-void MIC::pinHighDelayed(uint8_t pin)
+void MIC74::pinToHighDelayed(uint8_t pin)
 {
     if(pin > 7) return;
     pin = (1 << pin);
@@ -315,12 +315,12 @@ void MIC::pinHighDelayed(uint8_t pin)
  * @details Sets a given GPIO pin to low
  * @param pin the GPIO PIN number (0-7)
  */
-void MIC::pinLow(uint8_t pin)
+void MIC74::pinToLow(uint8_t pin)
 {
     if(pin > 7) return;
     pin = (1 << pin);    
-    this->_data = this->getReg(REG_DATA) & ~pin;
-    this->setReg(REG_DATA, this->_data);
+    this->_data = this->regRead(REG_DATA) & ~pin;
+    this->regWrite(REG_DATA, this->_data);
 }
 
 /**
@@ -329,7 +329,7 @@ void MIC::pinLow(uint8_t pin)
  * @details Just clear a given GPIO pin bit on the shadow register and do not send it to the chip
  * @param pin the GPIO PIN number (0-7)
  */
-void MIC::pinLowDelayed(uint8_t pin)
+void MIC74::pinToLowDelayed(uint8_t pin)
 {
     if(pin > 7) return;
     pin = (1 << pin);    
@@ -343,24 +343,25 @@ void MIC::pinLowDelayed(uint8_t pin)
  * @param gpio pin number
  * @returns true if it is High
  */
-uint8_t MIC::digitalRead(uint8_t pin) {
+uint8_t MIC74::digitalRead(uint8_t pin) {
     if(pin > 7) return LOW;
-    if(getReg(REG_DATA) & (1 << pin)) return HIGH;
+	this->_data = this->regRead(REG_DATA);
+    if(this->_data & (1 << pin)) return HIGH;
 	return LOW;
 }
 
 /**
  * @ingroup group02
  * @brief Sets a given value (HIGH(1) or LOW(0)) to a given GPIO pin
- * @details It is like the pinHigh() or pinLow()
+ * @details It is like the pinToHigh() or pinToLow()
  * @param GPIO pin number
  * @param value 1 = High; 0 = Low; or HIGH and LOW
  */
-void MIC::digitalWrite(uint8_t pin, uint8_t value) {
+void MIC74::digitalWrite(uint8_t pin, uint8_t value) {
     if(pin > 7) return;
 	if(value != LOW) value = 1;
-    this->_data = this->getReg(REG_DATA) & ~(1 << pin) | (value << pin);
-    this->setReg(REG_DATA, this->_data);
+    this->_data = this->regRead(REG_DATA) & ~(1 << pin) | (value << pin);
+    this->regWrite(REG_DATA, this->_data);
 }
 
 /**
@@ -370,7 +371,7 @@ void MIC::digitalWrite(uint8_t pin, uint8_t value) {
  * @param GPIO pin number
  * @param value 1 = High;  0 = Low; or HIGH and LOW
  */
-void MIC::digitalWriteDelayed(uint8_t pin, uint8_t value) {
+void MIC74::digitalWriteDelayed(uint8_t pin, uint8_t value) {
     if(pin > 7) return;
 	if(value != LOW) value = 1;
     this->_data = this->_data & ~(1 << pin) | (value << pin);
@@ -383,10 +384,10 @@ void MIC::digitalWriteDelayed(uint8_t pin, uint8_t value) {
  * @param bit_position bit position 
  * @returns true if it is High
  */
-bool MIC::regBitRead(uint8_t mic_register, uint8_t bit_position)
+bool MIC74::regBitRead(uint8_t mic_register, uint8_t bit_position)
 {
     if(bit_position > 7) return false;
-    return getReg(mic_register) & (1 << bit_position);
+    return regRead(mic_register) & (1 << bit_position);
 }
 
 /**
@@ -397,11 +398,11 @@ bool MIC::regBitRead(uint8_t mic_register, uint8_t bit_position)
  * @param bit_position bit position
  * @param value 0 = Low; 1 = High
  */
-void MIC::regBitWrite(uint8_t mic_register, uint8_t bit_position, uint8_t value)
+void MIC74::regBitWrite(uint8_t mic_register, uint8_t bit_position, uint8_t value)
 {
     if(bit_position > 7) return;
-    uint8_t currentRegisterValue = this->getReg(mic_register); // Gets the current register value
-    this->setReg(mic_register, (currentRegisterValue & ~(1 << bit_position)) | (value << bit_position));
+    uint8_t currentRegisterValue = this->regRead(mic_register); // Gets the current register value
+    this->regWrite(mic_register, (currentRegisterValue & ~(1 << bit_position)) | (value << bit_position));
 }
 
 /**
@@ -410,14 +411,14 @@ void MIC::regBitWrite(uint8_t mic_register, uint8_t bit_position, uint8_t value)
  * @details Activates the push-pull to a given GPIO pin
  * @param pin the GPIO PIN number (0-7)
  */
-void MIC::pushPullPinOn(uint8_t pin)
+void MIC74::pushPullPinOn(uint8_t pin)
 {
     if(pin > 7) return;
 
     uint8_t gppp;
-    gppp = this->getReg(REG_OUT_CFG); // Gets the current values of push-pull setup
+    gppp = this->regRead(REG_OUT_CFG); // Gets the current values of push-pull setup
     gppp |= 1 << pin;
-    this->setReg(REG_OUT_CFG, gppp); // Updates the values of push-pull setup
+    this->regWrite(REG_OUT_CFG, gppp); // Updates the values of push-pull setup
 }
 
 /**
@@ -426,14 +427,14 @@ void MIC::pushPullPinOn(uint8_t pin)
  * @details Deactivates the push-pull to a given GPIO pin
  * @param pin the GPIO PIN number (0-7)
  */
-void MIC::pushPullPinOff(uint8_t pin)
+void MIC74::pushPullPinOff(uint8_t pin)
 {
     if(pin > 7) return;
 
     uint8_t gppp;
-    gppp = this->getReg(REG_OUT_CFG); // Gets the current values of push-pull setup
+    gppp = this->regRead(REG_OUT_CFG); // Gets the current values of push-pull setup
     gppp &= ~(1 << pin);
-    this->setReg(REG_OUT_CFG, gppp); // Updates the values of push-pull setup
+    this->regWrite(REG_OUT_CFG, gppp); // Updates the values of push-pull setup
 }
 
 /**
@@ -445,14 +446,14 @@ void MIC::pushPullPinOff(uint8_t pin)
  * @param IE	This bit sets the Global Interrupt Enable. Operation: 1 (ON) = enabled, 0 (OFF) = disabled.
  * @param FAN	This bit Selects fan mode. Operation: 1 (ON) = fan mode; 0 (OFF) = I/O mode.
  */
-void MIC::setup(uint8_t ie, uint8_t fan)
+void MIC74::setup(uint8_t ie, uint8_t fan)
 {
 	if(ie != OFF) ie = 1;
 	if(fan != OFF) fan = 1;
-    uint8_t devcfg = this->getReg(REG_DEV_CFG); // Gets the current value of the REG_DEV_CFG register
+    uint8_t devcfg = this->regRead(REG_DEV_CFG); // Gets the current value of the REG_DEV_CFG register
 	devcfg = devcfg & ~(1 << BIT_IE) | (ie << BIT_IE);
 	devcfg = devcfg & ~(1 << BIT_FAN) | (fan << BIT_FAN);
-    this->setReg(REG_DEV_CFG, devcfg); // Write the new REG_DEV_CFG register value
+    this->regWrite(REG_DEV_CFG, devcfg); // Write the new REG_DEV_CFG register value
 }
 
 /**
@@ -462,12 +463,12 @@ void MIC::setup(uint8_t ie, uint8_t fan)
  * @details Active-low, open-drain output signals input-change-interrupts to the host on this pin. 
  * @param value - Global Interrupt Enable. Operation: 1 (ON) = enabled, 0 (OFF) = disabled.
  */
-void MIC::setInterrupts(uint8_t value)
+void MIC74::setInterrupts(uint8_t value)
 {
 	if(value != OFF) value = 1;
-    uint8_t devcfg = this->getReg(REG_DEV_CFG); // Gets the current value of the REG_DEV_CFG register
+    uint8_t devcfg = this->regRead(REG_DEV_CFG); // Gets the current value of the REG_DEV_CFG register
 	devcfg = devcfg & ~(1 << BIT_IE) | (value << BIT_IE);
-    this->setReg(REG_DEV_CFG, devcfg); // Write the new REG_DEV_CFG register value
+    this->regWrite(REG_DEV_CFG, devcfg); // Write the new REG_DEV_CFG register value
 }
 
 /**
@@ -476,12 +477,12 @@ void MIC::setInterrupts(uint8_t value)
  * @details If the chip is configured for fan control operation, the P[7:4] pins are automatically configured as open drain outputs.
  * @param value - Global Interrupt Enable. Operation: 1 (ON) = enabled, 0 (OFF) = disabled.
  */
-void MIC::fanMode(uint8_t value)
+void MIC74::fanMode(uint8_t value)
 {
 	if(value != OFF) value = 1;
-    uint8_t devcfg = this->getReg(REG_DEV_CFG); // Gets the current value of the REG_DEV_CFG register
+    uint8_t devcfg = this->regRead(REG_DEV_CFG); // Gets the current value of the REG_DEV_CFG register
 	devcfg = devcfg & ~(1 << BIT_FAN) | (value << BIT_FAN);
-    this->setReg(REG_DEV_CFG, devcfg); // Write the new REG_DEV_CFG register value
+    this->regWrite(REG_DEV_CFG, devcfg); // Write the new REG_DEV_CFG register value
 }
 
 /**
@@ -489,19 +490,19 @@ void MIC::fanMode(uint8_t value)
  * @brief Sets the interrupt-on-change feature to a given GPIO pin 
  * @details The REG_INT_MASK register controls the interrupt-on-change feature for each pin.
  * @details If a bit is set, the corresponding pin is enabled for interrupt-on-change.
- * @details if you want to configure more than one GPIO PIN at once, use the setPortInterrupts(mask);
+ * @details if you want to configure more than one GPIO PIN at once, use the writePortInterrupts(mask);
  * @details If enabled (via REG_INT_MASK and REG_DEV_CFG) changing the logic level on the associated pin will cause an interrupt to occur.
  * @param pin GPIO PIN you want to configure
  */
-void MIC::interruptPinOn(uint8_t pin) 
+void MIC74::interruptPinOn(uint8_t pin) 
 {
     if(pin > 7) return;
 
     uint8_t mask;
     // Enables the GPIO pin to deal with interrupt  
-    mask = this->getReg(REG_INT_MASK); // Gets the current values of REG_INT_MASK
+    mask = this->regRead(REG_INT_MASK); // Gets the current values of REG_INT_MASK
 	mask |= 1 << pin;
-    this->setReg(REG_INT_MASK, mask); // Updates the values of the REG_INT_MASK register
+    this->regWrite(REG_INT_MASK, mask); // Updates the values of the REG_INT_MASK register
 }
 
 /**
@@ -509,17 +510,17 @@ void MIC::interruptPinOn(uint8_t pin)
  * @brief Disables the interrupt-on-change feature to a given GPIO pin
  * @details The REG_INT_MASK register controls the interrupt-on-change feature for each pin.
  * @details If a bit is clear, the corresponding pin is disabled for interrupt-on-change.
- * @details if you want to configure more than one GPIO PIN at once, use the setPortInterrupts(mask);
+ * @details if you want to configure more than one GPIO PIN at once, use the writePortInterrupts(mask);
  * @details If disabled, changing the logic level on the associated pin will not cause an interrupt to occur.
  * @param pin GPIO PIN you want to configure
  */
-void MIC::interruptPinOff(uint8_t pin)
+void MIC74::interruptPinOff(uint8_t pin)
 {
     if(pin > 7) return;
 
     uint8_t mask;
     // Disables the GPIO pin to deal with interrupt  
-    mask = this->getReg(REG_INT_MASK); // Gets the current values of REG_INT_MASK
+    mask = this->regRead(REG_INT_MASK); // Gets the current values of REG_INT_MASK
 	mask &= ~(1 << pin);
-    this->setReg(REG_INT_MASK, mask); // Updates the values of the REG_INT_MASK register
+    this->regWrite(REG_INT_MASK, mask); // Updates the values of the REG_INT_MASK register
 }

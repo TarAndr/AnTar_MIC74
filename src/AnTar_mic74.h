@@ -11,8 +11,10 @@
  * @details 1) GPIO individual control (8 I/O pins)
  * @details 2) Reading and writing Access to all registers (0x00 ~ 0x06)
  * @details 3) I²C address customization (0x20 ~ 0x27)
- * @details 4) Internal Interrupt feature setup
- * @author Andrey Tarasenko (AndreiTarasenko1984@gmail.com)
+ * @details 4) Output mode configuration (push-pull or open-drain)
+ * @details 5) Internal Interrupt feature setup
+ * @details 6) Fan speed control
+ * @author Andrey Tarasenko (antar.georgia@gmail.com)
  * @brief It is a Library to control the MIC74 device.
  * @date 2023-05-01
  * @copyright Copyright (c) 2023 Andrey Tarasenko
@@ -60,6 +62,7 @@
 
 #define OFF 0x0
 #define ON 0x1
+
 #define INPUT_WITH_INTERRUPT 0x3
 #define OUTPUT_PUSHPULL 0x4
 
@@ -68,7 +71,7 @@
 
 #define IS_BIT_SET(x,y) ( (x) & (1 << (y)) )  // Check if a bit is set. Returns 0 or != 0
 
-class MIC
+class MIC74
 {
 
 protected:
@@ -76,8 +79,8 @@ protected:
    uint8_t _data = PORT_SET;			// REG_DATA shadow register
    uint8_t _status = PORT_CLR;			// REG_STATUS shadow register
 
-   uint8_t getReg(uint8_t reg);								// Gets the given register information
-   void setReg(uint8_t reg, uint8_t value);					// Sets a value to a given register
+   uint8_t regRead(uint8_t reg);								// Gets the given register information
+   void regWrite(uint8_t reg, uint8_t value);					// Sets a value to a given register
 
    bool regBitRead(uint8_t mic_register, uint8_t bit_position);
    void regBitWrite(uint8_t mic_register, uint8_t bit_position, uint8_t value);
@@ -89,13 +92,13 @@ public:
 
    uint8_t lookFor();										// Look for MIC74 device I2C Address
 
-   uint8_t getPortMode();									// Gets a value from the DIR Register
-   void setPortMode(uint8_t value);							// Sets a value to the DIR Register
+   uint8_t readPortMode();									// Gets a value from the DIR Register
+   void writePortMode(uint8_t value);						// Sets a value to the DIR Register
 
    void pinMode(uint8_t pin, uint8_t mode);					// Configures the specified pin to behave either as an input or an output
 
-   uint8_t getPortOutMode();								// Gets a value from the OUT_CFG Register
-   void setPortOutMode(uint8_t value);						// Sets a value to the OUT_CFG Register
+   uint8_t readPortOutMode();								// Gets a value from the OUT_CFG Register
+   void writePortOutMode(uint8_t value);					// Sets a value to the OUT_CFG Register
 
    void pushPullPinOn(uint8_t pin);							// Activates the push-pull to a given GPIO pin
    void pushPullPinOff(uint8_t pin);						// Deactivates the push-pull to a given GPIO pin
@@ -103,8 +106,8 @@ public:
    void setInterrupts(uint8_t value);						// Configures the MIC74 global interrupt feature
    void fanMode(uint8_t value);								// Configures the MIC74 fan mode feature
 
-   uint8_t getPortInterrupts();								// Gets a value from the INT_MASK Register
-   void setPortInterrupts(uint8_t mask);					// Sets a value to the INT_MASK Register
+   uint8_t readPortInterrupts();							// Gets a value from the INT_MASK Register
+   void writePortInterrupts(uint8_t mask);					// Sets a value to the INT_MASK Register
 
    void interruptPinOn(uint8_t pin);						// Sets the interrupt-on-change feature to a given GPIO pin 
    void interruptPinOff(uint8_t pin);						// Disables the interrupt-on-change feature to a given GPIO pin
@@ -117,39 +120,82 @@ public:
    void digitalWrite(uint8_t pin, uint8_t value);			// Sets a given value to a given GPIO pin
    void digitalWriteDelayed(uint8_t pin, uint8_t value);	// Just write a value to the shadow register
 
-   void pinHigh(uint8_t pin);								// Sets a given GPIO pin high
-   void pinHighDelayed(uint8_t pin);						// Just sets a given GPIO pin bit on the shadow register
-   void pinLow(uint8_t pin);								// Sets a given GPIO pin to low
-   void pinLowDelayed(uint8_t pin);							// Just clear a given GPIO pin bit on the shadow register
+   void pinToHigh(uint8_t pin);								// Sets a given GPIO pin high
+   void pinToHighDelayed(uint8_t pin);						// Just sets a given GPIO pin bit on the shadow register
+   void pinToLow(uint8_t pin);								// Sets a given GPIO pin to low
+   void pinToLowDelayed(uint8_t pin);						// Just clear a given GPIO pin bit on the shadow register
 
-   uint8_t getFanSpeed();									// Gets the fan speed
-   void setFanSpeed(uint8_t speed = 7);						// Sets a fan speed
+   uint8_t readFanSpeed();									// Gets the fan speed
+   void writeFanSpeed(uint8_t speed = 7);					// Sets a fan speed
 
-   uint8_t getStatus();										// Gets the current STATUS register value
+   uint8_t readStatus();									// Gets the current STATUS register value
 
-   /**
+/*
     * @ingroup group01
-    * @brief Checks if the Bit Value of a given bit position is high
+    * @brief Just view STATUS shadow register
+    * @details The function can be used to view the previously read STATUS value
+    * @param none
+    * @return The value of the locally stored STATUS */
+   
+   inline uint8_t getStatus()
+   {
+      return this->_status;
+   };
+
+/*
+    * @ingroup group01
+    * @brief Just view DATA shadow register
+    * @details The function can be used to view the previously read DATA value
+    * @param none
+    * @return The value of the locally stored DATA */
+   
+   inline uint8_t getData()
+   {
+      return this->_data;
+   };
+
+/*
+    * @ingroup group01
+    * @brief Checks if the Bit Value of a given bit position is set
     * @details This funcion is useful to extract a bit value (0 or 1) from a given MIC74 register
     * @param byteValue byte or register value
     * @param bitNumber bit offset (number/possition from 0 to 7)
-    * @return true if the bit position is 1 (high)
-    */
-   /* inline bool isBitValueHigh(uint8_t byteValue, uint8_t bitNumber)
+    * @return true if the bit position is 1 (set) */
+   
+   inline bool isBitSet(uint8_t byteValue, uint8_t bitNumber)
    {
       return (byteValue & (1 << bitNumber)) != 0;
-   }; */
+   };
 
-   /**
-     * @ingroup group01 I2C Frequency
-     * @brief Sets I2C bus to a given frequency
-     * @details 100000 = 100KHz; 400000 = 400KHz etc
-     * @details Plese check the property I2C bus frequency/speed of your board
-     */
-/*    inline void setClock(long freq)
+/*
+    * @ingroup group01
+    * @brief Set the Bit Value (1) of a given bit position in a given Byte Value
+    * @details This funcion is useful to set a bit value (1) to a given MIC74 register
+    * @param byteValue byte or register value
+    * @param bitNumber bit offset (number/possition from 0 to 7)
+    * @return new Byte Value with set (1) bit in given position */
+   
+   inline uint8_t bitToSet(uint8_t byteValue, uint8_t bitNumber)
    {
-      Wire.setClock(freq);
-   }; */
+		bitNumber = (1 << bitNumber);
+		byteValue |= bitNumber;
+		return byteValue;
+   };
+
+/*
+    * @ingroup group01
+    * @brief Clear the Bit Value (0) of a given bit position in a given Byte Value
+    * @details This funcion is useful to clear a bit value (0) in a given MIC74 register
+    * @param byteValue byte or register value
+    * @param bitNumber bit offset (number/possition from 0 to 7)
+    * @return new Byte Value with clear (0) bit in given position */
+   
+   inline uint8_t bitToClr(uint8_t byteValue, uint8_t bitNumber)
+   {
+		bitNumber = (1 << bitNumber);
+		byteValue &= ~bitNumber;
+		return byteValue;
+   };
 
 };
 

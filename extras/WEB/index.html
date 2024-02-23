@@ -1,0 +1,135 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><p>Documentation made in <a href="https://pandao.github.io/editor.md/en.html" title="Open source online Markdown editor">Open source online Markdown editor</a> and converted to HTML in <a href="https://markdowntohtml.com/" title="Convert Markdown to HTML">Free Markdown to HTML Converter</a>.</p>
+<h2 id="-antar-mic74-arduino-library-https-tarandr-github-io-mic74-"><a href="https://tarandr.github.io/MIC74/">AnTar MIC74 Arduino Library</a></h2>
+<p>It is an Arduino Library to control the MIC74 8-Bit I/O Expander. </p>
+<p>The MIC74 device provides 8-bit, general purpose, parallel I/O expansion. It can be controlled via I²C bus applications. It is a great and inexpensive device that allow you to add more peripherals to be controlled by your Arduino board via I²C protocol.</p>
+<p>Some Arduino projects may require more pins than the Arduino actually has. In these cases, you can use up to 8 MIC74 devices using only the I²C bus (two Arduino pins) and add up to 64 input / output ports to your project. </p>
+<p>This Arduino library implements the most important functions available on MIC74 device  and can be freely distributed using the MIT Free Software model. </p>
+<p><a href="LICENSE">Copyright (c) 2023 Tarasenko Andrey</a>.</p>
+<p><strong>Contents</strong></p>
+<p>[TOCM]</p>
+<p>[TOC]</p>
+<ol>
+<li><a href="#mit-license">License Copyright</a></li>
+<li><a href="#thanks">Thanks</a></li>
+<li><a href="#library-features">Library Features</a></li>
+<li><a href="#demo-video">Demo Video</a></li>
+<li><a href="#registers">Registers</a></li>
+<li><a href="#library-installation">Library Installation</a></li>
+<li><a href="https://tarandr.github.io/MIC74/#other-arduino-libraries-developed-by-the-author">Other Arduino Libraries developed by the Author</a></li>
+<li><a href="https://tarandr.github.io/MIC74/extras/apidoc/html/">API documentation</a></li>
+<li><a href="https://tarandr.github.io/MIC74/#basic-schematic">Basic Schematic</a></li>
+<li><a href="https://tarandr.github.io/MIC74/#internal-interrupt-setup">Internal Interrupt setup</a> </li>
+<li><a href="https://tarandr.github.io/MIC74/#references">References</a></li>
+</ol>
+<h3 id="mit-license">MIT License</h3>
+<p>Copyright (c) 2023 Andrey Tarasenko</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
+<h3 id="thanks">Thanks</h3>
+<ul>
+<li>Mrs. <a href="https://github.com/pu2clr">Ricardo Lima Caratti</a> the <a href="https://github.com/pu2clr/MCP23008/">MCP23008</a> library he created was taken as a template.</li>
+</ul>
+<h3 id="library-features">Library Features</h3>
+<p>This library uses the I²C communication protocol and implements most important functions offered by MIC74 device from Microchip. It also has primitive functions that make it easier to implement commands that may not have been implemented yet. The main features implemented can be seen below:</p>
+<ul>
+<li>GPIO individual control (8 I/O pins)</li>
+<li>Reading and writing Access to all registers (0x00 ~ 0x06) </li>
+<li>I²C address customization (0x20 ~ 0x27)</li>
+<li>Output mode configuration (push-pull or open-drain)</li>
+<li>Internal Interrupt feature setup</li>
+<li>Fan speed control</li>
+</ul>
+<h3 id="demo-video">Demo Video</h3>
+<p>{% include video01.html %}</p>
+<p><a href="https://www.youtube.com/watch?v=muUAhf5DGE8">See on Youtube</a></p>
+<BR>
+
+<h3 id="registers">Registers</h3>
+<p>This library has two basic function that you can use to control everything on MIC74. You can use <a href="https://www.youtube.com/watch?v=muUAhf5DGE8">regRead</a> and <a href="https://www.youtube.com/watch?v=muUAhf5DGE8">regWrite</a> methods to setup the registers below. Also this library has other functions that make the job easier to build applications based on Arduino and MIC74 devices. See <a href="https://www.youtube.com/watch?v=muUAhf5DGE8">API documentation</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Register</th>
+<th>Address</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DEV_CFG</td>
+<td>0x00</td>
+<td>Device configuration read/write register</td>
+</tr>
+<tr>
+<td>DIR</td>
+<td>0x01</td>
+<td>Data direction read/write register</td>
+</tr>
+<tr>
+<td>OUT_CFG</td>
+<td>0x02</td>
+<td>Output configuration read/write register</td>
+</tr>
+<tr>
+<td>STATUS</td>
+<td>0x03</td>
+<td>Status read register</td>
+</tr>
+<tr>
+<td>INT_MASK</td>
+<td>0x04</td>
+<td>Interrupt mask read/write register</td>
+</tr>
+<tr>
+<td>DATA</td>
+<td>0x05</td>
+<td>Data read/write register</td>
+</tr>
+<tr>
+<td>FAN_SPEED</td>
+<td>0x06</td>
+<td>Fan speed read/write register, Determines bit-pattern on FS[2:0]</td>
+</tr>
+</tbody>
+</table>
+<p>Also this library has other functions that make the job easier to build applications. See <a href="https://www.youtube.com/watch?v=muUAhf5DGE8">API documentation</a>.</p>
+<h3 id="library-installation">Library Installation</h3>
+<p>You can install this library on your Arduino environment using different methods. The best ways to do that are described below.  </p>
+<h4 id="installing-via-arduino-ide">Installing via Arduino IDE</h4>
+<p>This is the easiest method to install this library.</p>
+<p>On Arduino IDE, select the <strong>&quot;Tools&quot; &gt;&gt; Manage Libraries...&quot;</strong> item and look for MIC74. Finally select &quot;AnTar MIC74&quot;. The images below show the installation process. </p>
+<h5 id="going-to-manage-libraries-">Going to Manage libraries...</h5>
+<p><img src="extras/images/00_MIC74.jpg" alt="Manage libraries"></p>
+<h5 id="looking-for-mic74">Looking for MIC74</h5>
+<p><img src="extras/images/00_MIC74.jpg" alt="Looking for MIC74"></p>
+<h5 id="checking-the-antar-mic74-examples">Checking the AnTar MIC74 examples</h5>
+<p><img src="extras/images/00_MIC74.jpg" alt="Checking examples"></p>
+<h5 id="more-information">More information</h5>
+<p>See also <a href="https://docs.arduino.cc/software/ide-v1/tutorials/installing-libraries">Installing Libraries</a></p>
+<h4 id="installing-via-this-repository">Installing via this repository</h4>
+<p>First, you have to <a href="https://github.com/TarAndr/AnTar_MIC74/archive/main.zip">download</a> this library in zip format. 
+After, unzip the AnTar_MIC74-main.zip file in your Arduino Library folder:</p>
+<ul>
+<li>On <strong>Windows</strong>: &quot;My Documents\Arduino\libraries&quot;</li>
+<li>On <strong>MAC OS</strong>: ˜/Documents/Arduino/libraries</li>
+<li>On <strong>Linux</strong>: ˜/Documents/Arduino/libraries</li>
+</ul>
+<p>With that approach, you will have the <strong>most current version</strong> of the library. However, <strong>it may not be the most stable version</strong>. This is because the current version is always in development.
+Do you need some old version (release) of this library?  If yes, <a href="https://github.com/TarAndr/AnTar_MIC74/releases">check here</a>. </p>
+</body></html>
