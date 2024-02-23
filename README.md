@@ -30,6 +30,7 @@ This Arduino library implements the most important functions available on MIC74 
     * [MIC74 brief characteristics](#brief-characteristics-of-the-mic74-chip)
     * [Pin assignment of the MIC74 chip](#pin-assignment)
     * [Description and purpose of registers](#description-and-purpose-of-registers)
+    * [Official documentation from Microchip](extras/docs/MIC74-2-Wire-Serial-IO-Expander-and-Fan-Controller-DS20005969A.pdf)
 1. [Library methods](#library-methods)
     * [Configuration functions](#configuration-functions)
         * [The main function of setting up and starting the chip](#the-main-function-of-setting-up-and-starting-the-chip)
@@ -43,6 +44,7 @@ This Arduino library implements the most important functions available on MIC74 
         * [Setting the operating modes of the port output stages](#setting-the-operating-modes-of-the-port-output-stages)
         * [Setting the output stage mode of a separate pin](#setting-the-output-stage-mode-of-a-separate-pin)
     * [Control functions](#control-functions)
+        * [Setting a specified logic level on a specific pin](#setting-a-specified-logic-level-on-a-specific-pin)
 1. [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/)
 1. [Basic Schematic](https://tarandr.github.io/MIC74/#basic-schematic)
 1. [Internal Interrupt setup](https://tarandr.github.io/MIC74/#internal-interrupt-setup) 
@@ -181,6 +183,8 @@ For configuration and control, the MIC74 chip has 7 registers, each of which con
 - DATA - The register displays the current state of any pin configured as an input and the last value applied to a pin configured as an output. Writing a value to the DATA register sets the state of any pin configured as an output; writes to I/O bits configured as inputs are ignored. By default, all register bits are set to one. If the chip is configured for fan control, the P[7:4] pins are automatically configured as open drain outputs and their logic levels are controlled by the FAN_SPEED register, and the DATA register does not affect the operation of these pins;
 - FAN_SPEED - Fan operation control register, in which the three least significant bits are used. Any time the register contains a value of zero, it means the fan is off, and if a non-zero value is written to it, the /FS[2:0] and /SHDN outputs will go to the maximum fan speed state for approximately one second (tSTART). After this interval, the state of the fan speed control outputs will take the value specified in the contents of the FAN_SPEED register. This ensures that the fan starts reliably even when low speed operation is required. The dependence of the fan rotation speed on the value of the low-order bits of the register is shown in the following table, with “Speed 1” corresponding to the lowest, and “Speed 7” the highest actual fan rotation speed.
 
+[Official documentation from Microchip](extras/docs/MIC74-2-Wire-Serial-IO-Expander-and-Fan-Controller-DS20005969A.pdf)
+
 ---
 
 ## Library methods
@@ -188,6 +192,8 @@ For configuration and control, the MIC74 chip has 7 registers, each of which con
 This library has two categories of functions that you can use to control everything on the MIC74. The first category includes configuration functions and is used less frequently, while the second category consists of control functions and is used more often. This library also has other auxiliary functions that simplify the creation of applications based on Arduino and MIC74 devices. See [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/).
 
 ### Configuration functions
+
+This section contains a list of functions required to configure device settings.
 
 #### The main function of setting up and starting the chip:
 
@@ -317,6 +323,16 @@ Example: pushPullPinOff(3); will switch the output stage of pin P3 to open drain
 
 
 ### Control functions
+
+In all digital devices, control involves reading or writing the states of all or specific port pins, as well as reading and writing signals from additional auxiliary pins, if any.
+
+In this case, the pins can be configured as either outputs or inputs; accordingly, there are functions for both writing and reading the specified states. Additionally, pins configured as outputs can operate in push-pull or open-drain mode, and pins configured as inputs can generate interrupts or not use them.
+
+This section contains a list of functions according to the available control options.
+
+#### Setting a specified logic level on a specific pin:
+
+
 
 ---
 
