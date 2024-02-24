@@ -44,7 +44,9 @@ This Arduino library implements the most important functions available on MIC74 
         * [Setting the operating modes of the port output stages](#setting-the-operating-modes-of-the-port-output-stages)
         * [Setting the output stage mode of a separate pin](#setting-the-output-stage-mode-of-a-separate-pin)
     * [Control functions](#control-functions)
+        * [Setting logic levels on all pins simultaneously](#setting-logic-levels-on-all-pins-simultaneously)
         * [Setting a specified logic level on a specific pin](#setting-a-specified-logic-level-on-a-specific-pin)
+        * [Delayed setting of a given logic level on a specific pin](#delayed-setting-of-a-given-logic-level-on-a-specific-pin)
 1. [API documentation](https://tarandr.github.io/MIC74/extras/apidoc/html/)
 1. [Basic Schematic](https://tarandr.github.io/MIC74/#basic-schematic)
 1. [Internal Interrupt setup](https://tarandr.github.io/MIC74/#internal-interrupt-setup) 
@@ -330,7 +332,43 @@ In this case, the pins can be configured as either outputs or inputs; accordingl
 
 This section contains a list of functions according to the available control options.
 
+#### Setting logic levels on all pins simultaneously:
+
+`portWrite(value);`
+
+- **value**: the value to be written, which for clarity is conveniently represented as a bit field 0bxxxxxxxx.
+
+Where in the required positions “0” or “1” is written instead of “x”, for example `portWrite(0b11111111);` will simultaneously set the high logical level on all chip pins, and `portWrite(0b00000000);` correspondingly low.
+
 #### Setting a specified logic level on a specific pin:
+
+`digitalWrite(pin, value);`
+
+- **pin**: port pin 0 to 7;
+- **value**: HIGH or LOW value to be written.
+
+For example `digitalWrite(3, HIGH);` will set the P3 pin of the chip high, and `digitalWrite(3, LOW);` low logic level on the same pin.
+
+Additional alternative functions `pinToHigh(pin);` and `pinToLow(pin);` to set the high and low logic levels at the specified pin of the pin, respectively.
+
+For example `pinToHigh(3);` will set the logic level high at pin P3 of the microcircuit, and `pinToLow(3);` will set the logic level low on the same pin.
+
+#### Delayed setting of a given logic level on a specific pin:
+
+In the case when all or most of the pins are configured to work as outputs, and different pins are controlled by separate functions, during the program operation different sections of the program will change different bits of the I/O port, and each time a physical change in the states of the pins may entail an increased load to the bus and to the control microcontroller. In some cases, you can optimize the operation of the system and send values to the port once per cycle, or update the port value at certain time intervals, for example, by interrupts. To do this, the accumulated changes will be stored in a buffer, and then the buffer value will be physically sent to the port of the chip.
+
+For these purposes, the same functions for setting levels on the chip pins were implemented with the word “delayed” added to their names, which means delayed recording. You will also need an additional function that will send the buffer value to the port according to a given schedule:
+
+`digitalWriteDelayed(pin, value);`
+
+- **pin**: port pin 0 to 7;
+- **value**: HIGH or LOW value to be written.
+
+`pinToHighDelayed(pin);` and `pinToLowDelayed(pin);`
+
+**portWrite();** - overloaded function of the same name **portWrite(value);** called without parameters (the accumulated buffer value is automatically taken as a parameter), physical recording of the buffer value into the port register.
+
+The main thing is to approach the use of the latter functions consciously, since anomalies can occur when one section of code sets the logical level of a certain output, on which the logic of the operation of further algorithms following this section depends, and the physical writing of the value to the port has not yet occurred. It is also natural that it will not be possible to use deferred recording where delays are used in the program code; if, for example, we want to turn on an LED for a second, and sending a buffer to the port will wait for its lighting time to expire, then no physical lighting of the LED will occur at all. In addition, it is not recommended to mix and use delayed recording functions with regular immediate recording functions.
 
 
 
@@ -344,9 +382,6 @@ The image below shows a basic MIC74 application with LED. You can control up to 
 
 ![Basic Schematic with LEDs](extras/images/MIC74_LEDs.GIF)
 
-
-
-
 Also this library has other functions that make the job easier to build applications. See [API documentation](https://www.youtube.com/watch?v=muUAhf5DGE8).
 
 ---
@@ -354,7 +389,5 @@ Also this library has other functions that make the job easier to build applicat
 ## Thanks
 
 * Mrs. [Ricardo Lima Caratti](https://github.com/pu2clr) the [MCP23008](https://github.com/pu2clr/MCP23008/) library he created was taken as a template.
-
-
 
 Documentation created with the [Markdown Monster](https://markdownmonster.west-wind.com/ "Markdown Monster").
